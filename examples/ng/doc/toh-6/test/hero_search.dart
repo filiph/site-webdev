@@ -9,9 +9,9 @@ import 'package:angular2/platform/common.dart';
 import 'package:angular2/router.dart';
 import 'package:angular_test/angular_test.dart';
 import 'package:angular_tour_of_heroes/app_component.dart';
-import 'package:angular_tour_of_heroes/hero_search_component.dart';
-import 'package:angular_tour_of_heroes/hero_service.dart';
 import 'package:angular_tour_of_heroes/in_memory_data_service.dart';
+import 'package:angular_tour_of_heroes/src/hero_search_component.dart';
+import 'package:angular_tour_of_heroes/src/hero_service.dart';
 import 'package:http/http.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
@@ -87,18 +87,16 @@ void heroSearchTests() {
 
   test('select hero and navigate to detail', () async {
     clearInteractions(mockPlatformLocation);
-    await po.clickHero(0);
+    await po.selectHero(0);
     final c = verify(mockPlatformLocation.pushState(any, any, captureAny));
     expect(c.captured.single, '/detail/15');
   });
 }
 
 Future _typeSearchTextAndRefreshPO(String searchText) async {
+  Future firstHero;
+  await fixture.update((c) => firstHero = c.heroes.first);
   await po.search.type(searchText);
-  Stream<List> herosStream;
-  await fixture.update((c) => herosStream = c.heroes);
-  // Wait for the data to be fetched from db.
-  // (We could set a timeout, but it isn't needed with the mock db.)
-  await herosStream.first;
+  await firstHero;
   po = await fixture.resolvePageObject(HeroSearchPO);
 }

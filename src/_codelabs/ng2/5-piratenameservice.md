@@ -1,16 +1,12 @@
 ---
-layout: codelab
 title: "Step 5: Create a Name Service"
 description: "Take your first step to learning Dart fast."
-snippet_img: images/piratemap.jpg
-
 nextpage:
   url: /codelabs/ng2/6-readjsonfile
   title: "Step 6: Read a JSON File"
 prevpage:
   url: /codelabs/ng2/4-buttonbadge
   title: "Step 4: Add a Button"
-
 header:
   css: ["/codelabs/ng2/darrrt.css"]
 ---
@@ -26,16 +22,10 @@ as you add a service that returns a pirate name.
 <div class="row"> <div class="col-md-7" markdown="1">
 
 <div class="trydart-step-details" markdown="1">
+  1. In WebStorm's Project view, right-click the `lib/src` directory and
+    select **New > Dart File** from the menu that pops up.
 
-<ol markdown="1">
-<li markdown="1">In WebStorm's Project view,
-   right-click the `lib` directory and
-   select **New > Dart File** from the menu that pops up.
-</li>
-<li markdown="1">Enter "name_service" as the filename
-   and click **OK**.
-</li>
-</ol>
+  1. Enter "name_service" as the filename and click **OK**.
 </div>
 
 </div> <div class="col-md-5" markdown="1">
@@ -61,7 +51,7 @@ Add imports to the file.
 {% prettify dart %}
 [[highlight]]import 'dart:math' show Random;[[/highlight]]
 
-[[highlight]]import 'package:angular2/core.dart';[[/highlight]]
+[[highlight]]import 'package:angular2/angular2.dart';[[/highlight]]
 {% endprettify %}
 </div>
 
@@ -74,7 +64,7 @@ Add imports to the file.
 
 * `Random` provides a random number generator.
 
-* The `angular2/core.dart` library gives you access to the
+* The `angular2/angular2.dart` library gives you access to the
   `Injectable` class that you'll add next.
 
 </div></div>
@@ -163,11 +153,13 @@ class NameService {
   static final Random _indexGen = new Random();
 
   [[highlight]]final _names = <String>[[[/highlight]]
-    [[highlight]]'Anne', 'Mary', 'Jack', 'Morgan', 'Roger',[[/highlight]]
-    [[highlight]]'Bill', 'Ragnar', 'Ed', 'John', 'Jane'];[[/highlight]]
+    [[highlight]]'Anne', 'Mary', 'Jack', 'Morgan', 'Roger', //[[/highlight]]
+    [[highlight]]'Bill', 'Ragnar', 'Ed', 'John', 'Jane'
+  ];[[/highlight]]
   [[highlight]]final _appellations = <String>[[[/highlight]]
-    [[highlight]]'Jackal', 'King', 'Red', 'Stalwart', 'Axe',[[/highlight]]
-    [[highlight]]'Young', 'Brave', 'Eager', 'Wily', 'Zesty'];[[/highlight]]
+    [[highlight]]'Jackal', 'King', 'Red', 'Stalwart', 'Axe', //[[/highlight]]
+    [[highlight]]'Young', 'Brave', 'Eager', 'Wily', 'Zesty'
+  ];[[/highlight]]
 {% endprettify %}
 </div>
 
@@ -185,7 +177,7 @@ class NameService {
 
 * You could specify the type for `_names` and `_appellations` by changing
  `final` to `final List<String>`, but you don't need to. Even in
-  [strong mode](https://www.dartlang.org/guides/language/sound-dart),
+  [strong mode]({{site.dartlang}}/guides/language/sound-dart),
   Dart can get the type information from the initial value.
 
 </div></div>
@@ -205,7 +197,8 @@ class NameService {
   ...
   final _appellations = <String>[
     'Jackal', 'King', 'Red', 'Stalwart', 'Axe',
-    'Young', 'Brave', 'Eager', 'Wily', 'Zesty'];
+    'Young', 'Brave', 'Eager', 'Wily', 'Zesty'
+  ];
 
   [[highlight]]String _randomFirstName() =>[[/highlight]]
       [[highlight]]_names[_indexGen.nextInt(_names.length)];[[/highlight]]
@@ -288,7 +281,7 @@ Import the pirate name service.
 
 <div class="trydart-step-details" markdown="1">
 {% prettify dart %}
-import 'package:angular2/core.dart';
+import 'package:angular2/angular2.dart';
 
 [[highlight]]import 'name_service.dart';[[/highlight]]
 {% endprettify %}
@@ -535,9 +528,13 @@ If that fails, look in your browser's JavaScript console.
 In Dartium or Chrome, bring up the console using
 **View > Developer > JavaScript Console**.
 
+{% comment %}
+update-for-dart-2
+{% endcomment %}
+
 Finally, if you still haven't found the problem
 check your code against the files in
 [5-piratenameservice](https://github.com/dart-lang/one-hour-codelab/tree/master/ng2/5-piratenameservice).
 
-* [lib/badge_component.dart](https://raw.githubusercontent.com/dart-lang/one-hour-codelab/master/ng2/5-piratenameservice/lib/badge_component.dart)
-* [lib/name_service.dart](https://raw.githubusercontent.com/dart-lang/one-hour-codelab/master/ng2/5-piratenameservice/lib/name_service.dart)
+* [lib/src/badge_component.dart](https://raw.githubusercontent.com/dart-lang/one-hour-codelab/master/ng2/5-piratenameservice/lib/src/badge_component.dart)
+* [lib/src/name_service.dart](https://raw.githubusercontent.com/dart-lang/one-hour-codelab/master/ng2/5-piratenameservice/lib/src/name_service.dart)

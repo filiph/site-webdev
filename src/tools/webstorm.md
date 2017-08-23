@@ -21,6 +21,12 @@ with another JetBrains IDE such as IntelliJ IDEA, see the page
 To get started with WebStorm,
 install it and then tell it where to find the Dart SDK and Dartium.
 
+{% include dartium-2.0.html %}
+
+{% comment %}
+update-for-dart-2
+{% endcomment %}
+
 ### Installing software
 
 * [Install WebStorm](http://www.jetbrains.com/webstorm/download/) or,
@@ -69,9 +75,9 @@ Here's one way to configure Dart support in WebStorm:
   `Chromium` executable that contains the Dart VM.
   WebStorm ensures that the paths are valid.
   For more information, see the Dart installation guide for your OS:
-  [Windows](https://www.dartlang.org/install/windows),
-  [Linux](https://www.dartlang.org/install/linux), or
-  [Mac](https://www.dartlang.org/install/mac).
+  [Windows]({{site.dartlang}}/install/windows),
+  [Linux]({{site.dartlang}}/install/linux), or
+  [Mac]({{site.dartlang}}/install/mac).
 </aside>
 </li>
 </ol>

@@ -1,16 +1,12 @@
 ---
-layout: codelab
 title: "Step 1: Get to Know the Software"
 description: "Get the base app for the codelab, and play with the AngularDart Component demo."
-snippet_img: /codelabs/angular_components/images/cartoon.jpeg
-
 nextpage:
   url: /codelabs/angular_components/2-easystart
   title: "Step 2: Start Using AngularDart Components"
 prevpage:
   url: /codelabs/angular_components
   title: "Codelab: AngularDart Components"
-
 header:
   css: ["/codelabs/ng2/darrrt.css"]
 ---
@@ -34,7 +30,7 @@ GitHub repo. **Choose one:**
   `one-hour-codelab-master`.
 </li>
 
-<li> 
+<li>
   <p> Clone the repo. For example, from the command line: </p>
 
 {% prettify none %}
@@ -73,11 +69,13 @@ Use the tools of your choice to run the base app.
 For example, you could use `pub serve` and then visit `localhost:8080` in any modern web browser. Or you could use WebStorm to run the app in Dartium.
 </li>
 
+{% include dartium-2.0.html %}
+
 <li markdown="1">
 Play with the base app. It works, but it’s not pretty. Consider these issues:
 
 * The app doesn’t adhere to Google’s
-  [material design guidelines](https://material.google.com).
+  [Material Design guidelines](https://material.google.com).
 * The buttons would be prettier and easier to understand if they had images.
 * The user must scroll to see the whole UI.
 * Settings are visible even when the user has no interest in changing them.

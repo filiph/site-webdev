@@ -1,12 +1,20 @@
-// Gulp tasks related to updating example template files.
+// Gulp tasks related to creating derived example files and updating example
+// files from stagehand templates.
 'use strict';
 
 module.exports = function (gulp, plugins, config) {
 
   const cp = plugins.child_process;
   const EXAMPLES_PATH = config.EXAMPLES_PATH;
+  const LOCAL_TMP = config.LOCAL_TMP;
+  const fs = require("fs");
   const path = plugins.path;
   const replace = plugins.replace;
+
+  const qsPath = path.join(EXAMPLES_PATH, 'quickstart');
+  const toh0Path = path.join(EXAMPLES_PATH, 'toh-0');
+
+  // Stagehand related tasks (currently outdated)
 
   const exRootDir = path.resolve(EXAMPLES_PATH, '..');
   const webSimpleProjPath = config.webSimpleProjPath;
@@ -26,5 +34,29 @@ module.exports = function (gulp, plugins, config) {
       });
       return stream;
     });
+
+  // toh-0
+
+  gulp.task('update-toh-0', cb => {
+    const baseDir = qsPath;
+    return gulp.src([
+      `${baseDir}/**`,
+      `!${baseDir}/pubspec.lock`,
+      `!${baseDir}/build`,
+      `!${baseDir}/build/**`,
+    ], { base: baseDir })
+      // pubspec.yaml
+      .pipe(replace(/^(name:) .*$/m, '$1 angular_tour_of_heroes'))
+      .pipe(replace(/(^description:).*$/m, '$1 Tour of Heroes'))
+      .pipe(replace(/^#(author|homepage).*\n/gm, ''))
+      // index.html
+      .pipe(replace(/(<title>)[^<]+(<\/title>)/, '$1Angular Tour of Heroes$2'))
+      // *.dart
+      .pipe(replace(/(package:angular)_app\b/, '$1_tour_of_heroes'))
+      // E2E
+      .pipe(replace(/E2E Tests/, 'Tutorial $&'))
+
+      .pipe(gulp.dest(toh0Path));
+  });
 
 };

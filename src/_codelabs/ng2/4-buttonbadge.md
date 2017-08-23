@@ -1,16 +1,12 @@
 ---
-layout: codelab
 title: "Step 4: Add a Button"
 description: "Add a button to your Angular app."
-snippet_img: images/piratemap.jpg
-
 nextpage:
   url: /codelabs/ng2/5-piratenameservice
   title: "Step 5: Create a Name Service"
 prevpage:
   url: /codelabs/ng2/3-inputnamebadge
   title: "Step 3: Add an Input Field"
-
 header:
   css: ["/codelabs/ng2/darrrt.css"]
 ---
@@ -116,7 +112,6 @@ Add a `generateBadge()` function.
 
 <div class="trydart-step-details">
 {% prettify dart %}
-@Component(selector: 'pirate-badge', templateUrl: 'badge_component.html')
 class BadgeComponent {
   String badgeName = '';
   String buttonText = 'Aye! Gimme a name!';
@@ -198,9 +193,13 @@ If that fails, look in your browser's JavaScript console.
 In Dartium or Chrome, bring up the console using
 **View > Developer > JavaScript Console**.
 
+{% comment %}
+update-for-dart-2
+{% endcomment %}
+
 Finally, if you still haven't found the problem
 check your code against the files in
 [4-buttonbadge](https://github.com/dart-lang/one-hour-codelab/tree/master/ng2/4-buttonbadge).
 
-* [lib/badge_component.dart](https://raw.githubusercontent.com/dart-lang/one-hour-codelab/master/ng2/4-buttonbadge/lib/badge_component.dart)
-* [lib/badge_component.html](https://raw.githubusercontent.com/dart-lang/one-hour-codelab/master/ng2/4-buttonbadge/lib/badge_component.html)
+* [lib/src/badge_component.dart](https://raw.githubusercontent.com/dart-lang/one-hour-codelab/master/ng2/4-buttonbadge/lib/src/badge_component.dart)
+* [lib/src/badge_component.html](https://raw.githubusercontent.com/dart-lang/one-hour-codelab/master/ng2/4-buttonbadge/lib/src/badge_component.html)

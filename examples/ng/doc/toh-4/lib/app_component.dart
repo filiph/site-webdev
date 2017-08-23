@@ -2,18 +2,18 @@
 // #docregion
 import 'dart:async';
 
-import 'package:angular2/core.dart';
+import 'package:angular2/angular2.dart';
 
-import 'hero.dart';
-import 'hero_detail_component.dart';
+import 'src/hero.dart';
+import 'src/hero_detail_component.dart';
 // #docregion hero-service-import
-import 'hero_service.dart';
+import 'src/hero_service.dart';
 // #enddocregion hero-service-import
 
 @Component(
-    selector: 'my-app',
-    // #docregion template
-    template: '''
+  selector: 'my-app',
+  // #docregion template
+  template: '''
       <h1>{{title}}</h1>
       <h2>My Heroes</h2>
       <ul class="heroes">
@@ -23,11 +23,11 @@ import 'hero_service.dart';
           <span class="badge">{{hero.id}}</span> {{hero.name}}
         </li>
       </ul>
-      <my-hero-detail [hero]="selectedHero"></my-hero-detail>
+      <hero-detail [hero]="selectedHero"></hero-detail>
     ''',
-    // #enddocregion template
-    styles: const [
-      '''
+  // #enddocregion template
+  styles: const [
+    '''
       .selected {
         background-color: #CFD8DC !important;
         color: white;
@@ -75,13 +75,10 @@ import 'hero_service.dart';
         border-radius: 4px 0px 0px 4px;
       }
    '''
-    ],
-    directives: const [
-      HeroDetailComponent
-    ],
-    providers: const [
-      HeroService
-    ])
+  ],
+  directives: const [CORE_DIRECTIVES, HeroDetailComponent],
+  providers: const [HeroService],
+)
 class AppComponent implements OnInit {
   String title = 'Tour of Heroes';
   List<Hero> heroes;
@@ -91,11 +88,11 @@ class AppComponent implements OnInit {
 
   AppComponent(this._heroService);
 
-  // #docregion get-heroes
+  // #docregion getHeroes
   Future<Null> getHeroes() async {
     heroes = await _heroService.getHeroes();
   }
-  // #enddocregion get-heroes
+  // #enddocregion getHeroes
 
   void ngOnInit() {
     getHeroes();

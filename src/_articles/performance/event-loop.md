@@ -1,5 +1,4 @@
 ---
-layout: article
 title: "The Event Loop and Dart"
 description: "Learn how Dart handles the event queue and microtask queue, so you can write better asynchronous code with fewer surprises."
 written: 2013-09-30
@@ -29,6 +28,8 @@ and to Dart apps that have been compiled to JavaScript
 This article uses the term _Dart_ to differentiate between
 Dart apps and software written in other languages.
 </aside>
+
+{% include dartium-2.0.html %}
 
 Before reading this article,
 you should be familiar with the basics of

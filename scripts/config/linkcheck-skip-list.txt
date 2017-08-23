@@ -5,49 +5,23 @@
 # -----------------------
 
 # API search parameter links
-/angular/api/#!\?query=
-
-# We don't serve the dartdoc generated index.html; so the anchor to libraries isn't valid
-/angular/api/index(.html)?#libraries$
+/api/#!\?query=
+/api/#!\?package=
 
 # KNOWN ISSUES (to be investigated and/or resolved soon)
 # ------------
 
-# Dartdoc has some open issues re. Enums
-# - https://github.com/dart-lang/dartdoc/issues/1225
-# - https://github.com/dart-lang/dartdoc/issues/1232
-/angular/api/angular2.core/(ChangeDetectionStrategy|ViewEncapsulation)-class(.html)?#properties
-/angular/api/angular2.core/(ChangeDetectionStrategy|ViewEncapsulation)/
-/angular/api/angular2.compiler/(HandlerType|PropertyBindingType|ProviderAstType)-class(.html)?#properties
-/angular/api/angular2.compiler/(HandlerType|PropertyBindingType|ProviderAstType)/
-/angular/api/angular2.(platform.browser|security)/TemplateSecurityContext-class(.html)?#properties
-/angular/api/angular2.(platform.browser|security)/TemplateSecurityContext/
-/components/api/angular_components/(BottomPanelState|ScoreboardType|SelectableOption)-class(.html)?#properties
-/components/api/angular_components/(BottomPanelState|ScoreboardType|SelectableOption)/
+# angular.io is now an Angular app; the link checker has difficulty seeing anchors
+# (probably because the page hasn't been fully generated yet), so skip such links:
+https://angular.io/[^#]*#
 
-# Notice the following links _should_ start with `/angular/api/...` (api is missing):
-# https://github.com/dart-lang/site-webdev/issues/271
-/angular/static-assets
-/angular/angular2.compiler/(angular2.compiler-library|NgContentAst)
+# Ignore warnings about missing anchors into the live example apps:
+http://angular-examples.github.io/[^/]+/?#
 
-# LINKS excluded via if-docs, but still visible to linkchecker
-/angular/guide/change-log.html$
-/angular/cookbook/
-/angular/guide/appmodule.html$
-/angular/guide/server-communication#.*(observable|promise|rxjs|search-parameters|server)
-/angular/tutorial/toh-pt6#rxjs-imports
-
-# Dartdoc related
-/angular/api/static-assets/fonts
-/components/api/static-assets/fonts
-
-# Angular component page errors:
-/components/api/angular_components/MaterialTooltipDirective/_show
-/components/api/angular_components/ScoreboardComponent/_scrollable
-
-# API entry page URLs back into docs are wrong
-# https://github.com/dart-lang/site-webdev/issues/273
-/angular/api/(docs|examples)/
+# Sites using hash location strategy or anchors instead of query params.
+# Hence linkcheck issues a warning about the missing "anchor". Silence these:
+http://caniuse.com/#
+https://groups.google.com/a/dartlang.org/forum/#
 
 # Link placeholders
 \#link-TBD

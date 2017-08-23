@@ -1,16 +1,12 @@
 ---
-layout: codelab
 title: "Step 3: Add an Input Field"
 description: "Add an input field to your Angular app."
-snippet_img: images/piratemap.jpg
-
 nextpage:
   url: /codelabs/ng2/4-buttonbadge
   title: "Step 4: Add a Button"
 prevpage:
   url: /codelabs/ng2/2-blankbadge
   title: "Step 2: Add a Pirate Badge Component"
-
 header:
   css: ["/codelabs/ng2/darrrt.css"]
 ---
@@ -90,7 +86,7 @@ Delete the hardcoded badge name and add an event handler,
 {% prettify dart %}
 class BadgeComponent {
   String badgeName = [[highlight]]''[[/highlight]];
-  
+
   [[highlight]]void updateBadge(String inputName) {[[/highlight]]
     [[highlight]]badgeName = inputName;[[/highlight]]
   [[highlight]]}[[/highlight]]
@@ -133,9 +129,13 @@ If that fails, look in your browser's JavaScript console.
 In Dartium or Chrome, bring up the console using
 **View > Developer > JavaScript Console**.
 
+{% comment %}
+update-for-dart-2
+{% endcomment %}
+
 Finally, if you still haven't found the problem
 check your code against the files in
 [3-inputnamebadge](https://github.com/dart-lang/one-hour-codelab/tree/master/ng2/3-inputnamebadge).
 
-* [lib/badge_component.dart](https://raw.githubusercontent.com/dart-lang/one-hour-codelab/master/ng2/3-inputnamebadge/lib/badge_component.dart)
-* [lib/badge_component.html](https://raw.githubusercontent.com/dart-lang/one-hour-codelab/master/ng2/3-inputnamebadge/lib/badge_component.html)
+* [lib/src/badge_component.dart](https://raw.githubusercontent.com/dart-lang/one-hour-codelab/master/ng2/3-inputnamebadge/lib/src/badge_component.dart)
+* [lib/src/badge_component.html](https://raw.githubusercontent.com/dart-lang/one-hour-codelab/master/ng2/3-inputnamebadge/lib/src/badge_component.html)

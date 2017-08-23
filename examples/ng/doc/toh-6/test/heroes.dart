@@ -5,9 +5,9 @@
 import 'package:angular2/angular2.dart';
 import 'package:angular2/router.dart';
 import 'package:angular_test/angular_test.dart';
-import 'package:angular_tour_of_heroes/heroes_component.dart';
-import 'package:angular_tour_of_heroes/hero_service.dart';
 import 'package:angular_tour_of_heroes/in_memory_data_service.dart';
+import 'package:angular_tour_of_heroes/src/heroes_component.dart';
+import 'package:angular_tour_of_heroes/src/hero_service.dart';
 import 'package:http/http.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
@@ -65,7 +65,7 @@ void basicTests() {
 
 void selectedHeroTests() {
   setUp(() async {
-    await po.clickHero(targetHeroIndex);
+    await po.selectHero(targetHeroIndex);
     po = await fixture.resolvePageObject(HeroesPO);
   });
 
@@ -89,7 +89,7 @@ void selectedHeroTests() {
   });
 
   test('select another hero', () async {
-    await po.clickHero(0);
+    await po.selectHero(0);
     po = await fixture.resolvePageObject(HeroesPO);
     final heroData = {'id': 11, 'name': 'Mr. Nice'};
     expect(await po.selectedHero, heroData);
@@ -109,7 +109,7 @@ void addHeroTests() {
   });
 
   test('select new hero', () async {
-    await po.clickHero(numHeroes);
+    await po.selectHero(numHeroes);
     po = await fixture.resolvePageObject(HeroesPO);
     expect(po.heroes.length, numHeroes + 1);
     expect((await po.selectedHero)['name'], newHeroName);

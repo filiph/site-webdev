@@ -7,13 +7,15 @@ permalink: /tools/pub/dart2js-transformer
 
 The [pub serve](/tools/pub/pub-serve), [pub build](/tools/pub/pub-build),
 and [pub run]({{site.dartlang}}/tools/pub/cmd/pub-run.html)
-commands use the [dart2js](/tools/dart2js)
-compiler to convert your Dart files to JavaScript.
+commands use the [dart2js](/tools/dart2js) compiler
+(unless you specify another compiler)
+to convert your Dart files to JavaScript.
 
 You can configure dart2js in the
 [pubspec]({{site.dartlang}}/tools/pub/pubspec.html) for your package.
 To do this, add `$dart2js` (note the leading dollar sign) under the
 `transformers:` field.
+If present, `$dart2js` is usually the last transformer.
 
 For example, by default, `pub` minifies an app when in release mode
 (`pub build` defaults to `release` mode), but not otherwise
@@ -22,6 +24,7 @@ The following example ensures that pub minifies the app in all situations:
 
 {% prettify yaml %}
 transformers:
+- ...list of transformers...
 - $dart2js:
     minify: true
 {% endprettify %}
@@ -36,7 +39,7 @@ You can specify the `csp` flag in the pubspec file, as follows:
 transformers:
 - chrome
 - $dart2js:
-  csp: true
+    csp: true
 {% endprettify %}
 
 ## Options
@@ -76,23 +79,17 @@ For more information, see
 
 `commandLineOptions: [...args...]`
 
-In addition to the options previously listed, `commandLineOptions`
-is available as a fallback for cases where a new command-line option has
-been added to dart2js, but a corresponding configuration option has not
-yet been added to pub.
+To specify one or more dart2js options that have no corresponding pub option,
+use `commandLineOptions`.
 
-The following example illustrates how to specify an `--enable-foo`
-configuration option:
+The following example illustrates how to specify `--enable-foo`
+and `--enable-bar` configuration options:
 
 {% prettify yaml %}
-dependencies:
-  polymer: ^=0.14.0
-  core_elements: ^0.7.1
-  browser: ^0.10.0
-  range:
 transformers:
-- polymer:
-    entry_points: web/index.html
+- angular2:
+    entry_points: web/main.dart
+- dart_to_js_script_rewriter
 [[highlight]]- $dart2js:[[/highlight]]
-    [[highlight]]commandLineOptions: [--enable-foo][[/highlight]]
+    [[highlight]]commandLineOptions: [--enable-foo, --enable-bar][[/highlight]]
 {% endprettify %}

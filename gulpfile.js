@@ -18,10 +18,10 @@ const del = require('del');
 const fsExtra = require('fs-extra');
 const fs = fsExtra;
 const globby = require("globby");
+const ngPkgVers = require('./src/_data/ng-pkg-vers.json');
 // const os = require('os');
 const path = require('canonical-path');
 const Q = require("q");
-const replace = require('gulp-replace');
 const spawn = require('child_process').spawn;
 const taskListing = require('gulp-task-listing');
 // cross platform version of spawn that also works on windows.
@@ -38,43 +38,52 @@ const npmbin = path.resolve('node_modules/.bin');
 const npmbinMax = `node --max-old-space-size=4096 ${npmbin}`;
 
 const THIS_PROJECT_PATH = path.resolve('.');
+const siteFolder = 'publish';
+
 // angular.io constants
 // TODO: get path from the env
 const PUBLIC_PATH = './public';
 const DOCS_PATH = path.join(PUBLIC_PATH, 'docs');
 const EXAMPLES_PATH = './examples/ng/doc';
 const TOOLS_PATH = './tools';
-const TMP_PATH = process.env.TMP;
+const TMP_PATH = process.env.TMP; // shared temp folder (for larger downloads, etc)
+const LOCAL_TMP = 'tmp'; // temp folder local to this project
 
 const angulario = path.resolve('../angular.io');
 
 const isSilent = !!argv.silent;
 if (isSilent) gutil.log = gutil.noop;
-const _dgeniLogLevel = argv.dgeniLog || (isSilent ? 'error' : 'warn');
+// Use --log-at=LEVEL to avoid conflict with the gulp --log-level flag.
+const _logLevel = argv.logAt || (isSilent ? 'error' : 'warn');
 
 const ngDocSrc = path.join('src', 'angular');
-const fragsPath = path.join(ngDocSrc, '_fragments');
-const qsProjName = 'angular_quickstart';
+const fragsPath = path.join(LOCAL_TMP, '_fragments');
+const qsProjName = 'angular_app';
 const config = {
-  _dgeniLogLevel: _dgeniLogLevel,
+  _dgeniLogLevel: _logLevel,
+  _logLevel: _logLevel,
   angulario: angulario,
   dartdocProj: ['acx', 'ng'],
-  repoPath: {
-    acx: process.env.ACX_REPO,
-    ng: process.env.NG2_REPO,
-  },
   DOCS_PATH: DOCS_PATH,
   EXAMPLES_PATH: EXAMPLES_PATH,
-  ngDocSrc: ngDocSrc,
-  qsProjName: qsProjName,
-  relDartDocApiDir: path.join('doc', 'api'),
-  THIS_PROJECT_PATH: THIS_PROJECT_PATH,
-  TOOLS_PATH: TOOLS_PATH,
   frags: {
     apiDirName: '_api',
     dirName: path.basename(fragsPath),
     path: fragsPath,
   },
+  LOCAL_TMP: LOCAL_TMP,
+  ngDocSrc: ngDocSrc,
+  ngPkgVers: ngPkgVers,
+  qsProjName: qsProjName,
+  relDartDocApiDir: path.join('doc', 'api'),
+  repoPath: {
+    acx: process.env.ACX_REPO,
+    ng: process.env.NG_REPO,
+  },
+  siteFolder: siteFolder,
+  THIS_PROJECT_PATH: THIS_PROJECT_PATH,
+  TOOLS_PATH: TOOLS_PATH,
+  unifiedApiPath: path.join(siteFolder, 'api'),
   webSimpleProjPath: path.join(TMP_PATH, qsProjName),
 };
 
@@ -118,13 +127,14 @@ const plugins = {
   path2ApiDocFor: path2ApiDocFor,
   path: path,
   q: Q,
-  replace: replace,
-  spawnExt: spawnExt
+  rename: require('gulp-rename'),
+  replace: require('gulp-replace'),
+  spawnExt: spawnExt,
 };
 
 const extraTasks = `
-  api api-list cheatsheet dartdoc examples example-frag example-template
-  ngio-get ngio-put sass test update-ng-vers update-web-simple`;
+  api api-list dartdoc e2e examples example-frag example-template
+  get-stagehand-proj jade-to-md ngio-get ngio-put test update-ng-vers`;
 extraTasks.split(/\s+/).forEach(task => task && require(`./gulp/${task}`)(gulp, plugins, config))
 
 //-----------------------------------------------------------------------------
@@ -135,15 +145,13 @@ extraTasks.split(/\s+/).forEach(task => task && require(`./gulp/${task}`)(gulp, 
 // Options:
 //   --fast  skips generation of dartdocs if they already exist
 //
-// Ideally, we'd want to ensure that update-web-simple completes before the other
+// Ideally, we'd want to ensure that get-stagehand-proj completes before the other
 // tasks but it is too much work to do that in gulp 3.x. Generally it shouldn't be
 // a problem. We can always fix the dependencies once gulp 4.x is out.
-gulp.task('build', ['update-web-simple', 'create-example-fragments', 'dartdoc',
-  'build-api-list-json', 'build-cheatsheet', 'finalize-api-docs', 'sass'], cb => {
-    // There is a rule in public/docs/_examples/.gitignore that prevents a2docs.css
-    // from being excluded. Let's stay synced with the TS counterpart of that .gitignore
-    // and just delete the file:
-    child_process.execSync(`rm -f public/docs/_examples/_boilerplate/a2docs.css`);
+gulp.task('build', ['get-stagehand-proj', 'create-example-fragments', 'dartdoc',
+  'build-api-list-json', 'finalize-api-docs', 'add-examples-to-site'], cb => {
+    // Make API lists available for the sitemap generation:
+    child_process.execSync(`cp src/api/api-list.json src/_data/api-list.json`);
     return execp(`jekyll build`);
   });
 
@@ -154,10 +162,14 @@ gulp.task('build-deploy', ['build'], () => {
 
 gulp.task('site-refresh', ['_clean', 'get-ngio-files']);
 
-const _cleanTargets = ['publish'];
-const _delTmp = () => del(_cleanTargets, { force: true });
-gulp.task('clean', cb => _delTmp());
-gulp.task('_clean', cb => argv.clean ? _delTmp() : cb());
+const _quickCleanTargets = [siteFolder, path.join(fragsPath, '**')];
+const _cleanTargets = [siteFolder, LOCAL_TMP];
+function _delTmp(delTargets) {
+  gutil.log(`  Deleting ${delTargets}`);
+  return del(delTargets, { force: true });
+}
+gulp.task('clean', cb => _delTmp(_cleanTargets));
+gulp.task('_clean', cb => argv.clean ? _delTmp(_quickCleanTargets) : cb());
 gulp.task('clean-src', cb => execp(`git clean -xdf src`));
 
 gulp.task('default', ['help']);

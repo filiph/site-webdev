@@ -1,5 +1,4 @@
 ---
-layout: article
 title: "Using Dart with JSON Web Services"
 description: "Learn how to consume JSON-based web services with Dart."
 written: 2012-04-01
@@ -208,8 +207,15 @@ Making a typo in any of the string names will return a null value which could
 then go on to cause a NoSuchMethodError.  Accessing the values from the map
 cannot be validated before run-time.
 
-One of the benefits of using Dart is support for optional static types. Static
-types help you catch bugs early by allowing tools to detect type mismatches
+One of the benefits of using Dart is support for optional static types.
+
+{% include optional-types-2.0.html %}
+
+{% comment %}
+update-for-dart-2.0
+{% endcomment %}
+
+Static types help you catch bugs early by allowing tools to detect type mismatches
 before you run your code, and to throw exceptions as soon as a runtime issue
 occurs.  An additional benefit of using static types is that code editors
 and IDEs (such as WebStorm, Sublime, vim)
@@ -432,7 +438,7 @@ dart:convert library by letting you use dot notation to access data fields.
 ### About the author
 
 Chris Buckett is a Technical Manager for
-[Entity Group Ltd](http://www.entity.co.uk/), responsible for building and
+[Entity Group Ltd](https://www.entitygroup.com), responsible for building and
 delivering enterprise client-server webapps, mostly with GWT, Java and .Net.
 He wrote _Dart in Action_, which is available
 at [manning.com](http://www.manning.com/buckett).

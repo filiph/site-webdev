@@ -6,6 +6,7 @@ module.exports = function (gulp, plugins, config) {
   const argv = plugins.argv;
   const cp = plugins.child_process;
   const del = plugins.del;
+  const fs = plugins.fs;
   const gutil = plugins.gutil;
   const path = plugins.path;
 
@@ -19,32 +20,33 @@ module.exports = function (gulp, plugins, config) {
   var _devguideShredOptions = {
     examplesDir: EXAMPLES_PATH,
     fragmentsDir: frags.path,
-    logLevel: config._dgeniLogLevel
+    logLevel: config._logLevel
   };
 
   var _apiShredOptions = {
     examplesDir: path.join(EXAMPLES_PATH, '..', 'api'),
     fragmentsDir: path.join(frags.path, frags.apiDirName),
-    logLevel: config._dgeniLogLevel
+    logLevel: config._logLevel
   };
 
-  gulp.task('create-example-fragments', ['_shred-api-examples', '_shred-devguide-examples'], () => createTxTFragFiles());
+  gulp.task('create-example-fragments',
+    ['_clean', 'add-example-boilerplate', '_shred-api-examples',
+     '_shred-devguide-examples', '_shred-generated-examples']);
 
-  gulp.task('_shred-devguide-examples', ['_shred-clean-devguide', 'add-example-boilerplate'], (done) => shred(_devguideShredOptions, done));
+  gulp.task('_shred-devguide-examples', ['_shred-clean-devguide'], done => shred(_devguideShredOptions, done));
 
-  gulp.task('_shred-api-examples', ['_shred-clean-api'], (cb) => shred(_apiShredOptions));
+  gulp.task('_shred-generated-examples', ['_shred-clean-devguide'], done => {
+    const options = Object.assign({}, _devguideShredOptions);
+    options.examplesDir = path.join(config.LOCAL_TMP, EXAMPLES_PATH);
+    return shred(options, done);
+  });
 
-  // Create *.txt fragment files from *.md files.
-  function createTxTFragFiles() {
-    let find = `find ${frags.path}`;
-    if (argv.filter) find = `${find} -path "*${argv.filter}*"`;
-    
-    gutil.log('Create *.txt frag files: duplicate *.md files, but change extension to .txt');
-    cp.execSync(`${find} -name "*.md" -exec bash -c 'cp "$0" "\${0%.md}.txt"' {} \\;`);
-
-    gutil.log('Create *.txt frag files: keep only the code excerpt between ``` line markers');
-    cp.execSync(find + " -name '*.txt' -exec sed -ne '/^```/,/^```/{ /^```/d; $d; p; }' -i '' {} \\;");
-  }
+  gulp.task('_shred-api-examples', ['_shred-clean-api'], () => shred(_apiShredOptions).then(() => {
+    // Setup path aliases for API doc fragments
+    const frags = _apiShredOptions.fragmentsDir;
+    if (!fs.existsSync(path.join(frags, 'doc'))) cp.execSync(`ln -s .. doc`, { cwd: frags });
+    if (!fs.existsSync(path.join(frags, 'docs'))) cp.execSync(`ln -s doc docs`, { cwd: frags });
+  }));
 
   function shred(options) {
     // Split big shredding task into partials 2016-06-14
@@ -57,7 +59,7 @@ module.exports = function (gulp, plugins, config) {
     return promise;
   }
 
-  gulp.task('_shred-clean-devguide', (cb) => {
+  gulp.task('_shred-clean-devguide', ['_clean'], () => {
     const globPattern = `${argv.filter || '*'}*/*.*`;
     const cleanPath = path.join(_devguideShredOptions.fragmentsDir, globPattern);
     const args = [cleanPath, '!**/*.ovr.*', '!**/_api/**'];
@@ -65,7 +67,7 @@ module.exports = function (gulp, plugins, config) {
     return del(args);
   });
 
-  gulp.task('_shred-clean-api', function (cb) {
+  gulp.task('_shred-clean-api', ['_clean'], () => {
     const globPattern = `${argv.filter || '*'}*/*.*`;
     const cleanPath = path.join(_apiShredOptions.fragmentsDir, globPattern);
     const args = [cleanPath, '!**/*.ovr.*'];

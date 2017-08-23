@@ -33,14 +33,14 @@ a code {
     }
   }
   .brand {
-    width: 180px;
+    width: 250px;
     line-height: 40px;
   }
 }
 #sidenav {
   .brand {
     img {
-      width: 180px;
+      width: 250px;
     }
   }
 }
@@ -108,6 +108,13 @@ body.homepage .get-started-section {
   }
 }
 
+/* Centered image style */
+img.centered {
+    margin-left: auto;
+    display: block;
+    margin-right: auto;
+}
+
 /* Don't display navigation aids when printing */
 @media print {
   #page-header, #sidenav, #subnav, #page-footer, .banner, #toc {
@@ -119,4 +126,9 @@ body.homepage .get-started-section {
       margin: 0;
     }
   }
+}
+
+/* Overwrite bootstrap */
+pre code {
+  white-space: pre;
 }

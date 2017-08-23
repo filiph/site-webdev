@@ -12,10 +12,11 @@ if  [[ -z "$(type -t dart)" ]]; then
     # https://storage.googleapis.com/dart-archive/channels/stable/release/latest/sdk/dartsdk-linux-x64-release.zip
     # https://storage.googleapis.com/dart-archive/channels/stable/release/latest/dartium/dartium-macos-x64-release.zip
 
-    CHANNEL=stable # vs. dev
+    : ${DART_CHANNEL:=stable} # dev or stable
+    CHANNEL=$DART_CHANNEL
     DART_ARCHIVE=https://storage.googleapis.com/dart-archive/channels
     VERS=$CHANNEL/release/latest
-    # VERS=$CHANNEL/release/1.23.0 # If necessary, pin a specific version like this
+    # VERS=$CHANNEL/release/1.24.0 # If necessary, pin a specific version like this
 
     mkUrl() {
         local dir=$1
@@ -66,11 +67,10 @@ if  [[ -z "$(type -t dart)" ]]; then
         echo
         dart --version
     fi
+    ls -l $PKG
     travis_fold end install.dart
 else
     echo Dart SDK appears to be installed: `type dart`
     # PATH is set in ./scripts/env-set.sh
     dart --version
 fi
-
-ls -l $PKG

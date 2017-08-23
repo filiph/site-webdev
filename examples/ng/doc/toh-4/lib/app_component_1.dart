@@ -1,28 +1,29 @@
 // #docplaster
-// #docregion on-init
-import 'package:angular2/core.dart';
+// #docregion ngOnInit-stub
+import 'package:angular2/angular2.dart';
 
-// #enddocregion on-init
-import 'hero.dart';
-import 'hero_detail_component.dart';
-import 'hero_service_1.dart';
+// #enddocregion ngOnInit-stub
+import 'src/hero.dart';
+import 'src/hero_detail_component.dart';
+import 'src/hero_service_1.dart';
 
 // Testable but never shown
 @Component(
-    selector: 'my-app',
-    template: '''
+  selector: 'my-app',
+  template: '''
     <div *ngFor="let hero of heroes" (click)="onSelect(hero)">
       {{hero.name}}
     </div>
-    <my-hero-detail [hero]="selectedHero"></my-hero-detail>
+    <hero-detail [hero]="selectedHero"></hero-detail>
     ''',
-    directives: const [HeroDetailComponent],
-    // #docregion providers
-    providers: const [HeroService])
+  directives: const [CORE_DIRECTIVES, HeroDetailComponent],
+  // #docregion providers
+  providers: const [HeroService],
 // #enddocregion providers
-// #docregion on-init
+)
+// #docregion ngOnInit-stub
 class AppComponent implements OnInit {
-  // #enddocregion on-init
+  // #enddocregion ngOnInit-stub
   String title = 'Tour of Heroes';
   // #docregion heroes-prop
   List<Hero> heroes;
@@ -45,16 +46,16 @@ class AppComponent implements OnInit {
   }
   // #enddocregion getHeroes
 
-  // #docregion ng-on-init, on-init
+  // #docregion ngOnInit, ngOnInit-stub
   void ngOnInit() {
-    // #enddocregion on-init
+    // #enddocregion ngOnInit-stub
     getHeroes();
-    // #docregion on-init
+    // #docregion ngOnInit-stub
   }
-  // #enddocregion ng-on-init, on-init
+  // #enddocregion ngOnInit, ngOnInit-stub
 
   void onSelect(Hero hero) {
     selectedHero = hero;
   }
-  // #docregion on-init
+  // #docregion ngOnInit-stub
 }

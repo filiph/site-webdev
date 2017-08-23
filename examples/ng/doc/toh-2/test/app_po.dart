@@ -1,8 +1,10 @@
 // #docregion
 
+// #docregion imports
 import 'dart:async';
 
 import 'package:pageloader/objects.dart';
+// #enddocregion imports
 
 class AppPO {
   @ByTagName('h1')
@@ -11,17 +13,21 @@ class AppPO {
   @FirstByCss('h2')
   PageLoaderElement _tabTitle;
 
+  // #docregion _heroes, selectHero
   @ByTagName('li')
   List<PageLoaderElement> _heroes;
+  // #enddocregion _heroes, selectHero
 
   @ByTagName('li')
   @WithClass('selected')
   @optional
   PageLoaderElement _selectedHero;
 
+  // #docregion hero-detail-heading
   @FirstByCss('div h2')
   @optional
   PageLoaderElement _heroDetailHeading; // e.g. 'Mr Freeze details!'
+  // #enddocregion hero-detail-heading
 
   @FirstByCss('div div')
   @optional
@@ -34,10 +40,14 @@ class AppPO {
   Future<String> get pageTitle => _pageTitle.visibleText;
   Future<String> get tabTitle => _tabTitle.visibleText;
 
+  // #docregion heroes
   Iterable<Future<Map>> get heroes =>
       _heroes.map((el) async => _heroDataFromLi(await el.visibleText));
 
-  Future clickHero(int index) => _heroes[index].click();
+  // #enddocregion heroes
+  // #docregion selectHero
+  Future selectHero(int index) => _heroes[index].click();
+  // #enddocregion selectHero
 
   Future<Map> get selectedHero async => _selectedHero == null
       ? null
@@ -51,14 +61,18 @@ class AppPO {
     return _heroData(idAsString, matches[1]);
   }
 
+  // #docregion clear
   Future clear() => _input.clear();
+  // #enddocregion clear
   Future type(String s) => _input.type(s);
 
   Map<String, dynamic> _heroData(String idAsString, String name) =>
       {'id': int.parse(idAsString, onError: (_) => -1), 'name': name};
 
+  // #docregion heroes
   Map<String, dynamic> _heroDataFromLi(String liText) {
     final matches = new RegExp((r'^(\d+) (.*)$')).firstMatch(liText);
     return _heroData(matches[1], matches[2]);
   }
+  // #enddocregion heroes
 }

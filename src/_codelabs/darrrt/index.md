@@ -1,10 +1,8 @@
 ---
-layout: codelab
 title: "Low-Level HTML Pirate Codelab"
 description: "Take your first step to learning Dart fast."
 permalink: /codelabs/darrrt
-snippet_img: images/piratemap.jpg
-
+image: images/piratemap.jpg?3
 header:
   css: ["/codelabs/darrrt/darrrt.css"]
 ---
@@ -19,7 +17,7 @@ We recommend Angular for writing Dart web apps.
 See [Avast, Ye Pirates: Write an AngularDart App](/codelabs/ng2)
 for an Angular version of this codelab.
 You can find other codelabs on the
-[webdev codelabs](/codelabs) page.
+[web codelabs](/codelabs) page.
 </aside>
 
 All you need is a browser and some familiarity with programming.
@@ -1158,7 +1156,7 @@ class PirateName {
    request that returns a string.
 
 * `getString()` is reading the
-   [piratenames.json](https://www.dartlang.org/f/piratenames.json)
+   [piratenames.json]({{site.dartlang}}/f/piratenames.json)
    file stored on dartlang.
 
 * `getString()` is asynchronous. It sets up the GET request

@@ -1,10 +1,13 @@
 ##
-## This Plugin enables Jade support to pages and posts.
+## Plugin for converting Jade pages. It also:
+##
+## - Inserts code excerpts (required by makeExample, makeExcerpt, and makeTabs).
+## - Supports the <?code-excerpt?> processing instruction.
 ##
 
 require 'cgi'
 require 'open3'
-# require 'pathname'
+require_relative 'code_excerpt_processor'
 
 module Jekyll
 
@@ -38,7 +41,7 @@ module Jekyll
     end
 
     def getCodeFrag(path)
-      path2frag = File.join Dir.pwd, "src/angular", path
+      path2frag = File.join Dir.pwd, "tmp", path
       if File.exists? path2frag
         lines = File.readlines path2frag
         result = stripMdCodeMarkers(lines)
@@ -51,7 +54,22 @@ module Jekyll
 
     def convert(content)
       begin
-        matches = /- FilePath: (.*)/.match(content);
+        # Unescape {!{ ... }!} back to Angular {{ }}
+        content.gsub!(/{!{/, '{{') # &#123;&#123;
+        content.gsub!(/}!}/, '}}') # &#125;&#125;
+
+        # Process code excerpts
+        @cep = NgCodeExcerpt::JadeMarkdownProcessor.new() unless @cep
+        @cep.codeExcerptProcessingInit()
+        content.gsub!(@cep.codeExcerptRE) {
+          @cep.processCodeExcerpt(Regexp.last_match, 'jade')
+        }
+        # logPuts '>>>> File after PI processing: **************************************'
+        # logPuts content
+        # logPuts '>>>> ****************************************************************'
+
+        # Process Jade
+        matches = /- FilePath: (\S+)/.match(content);
         filePath = matches ? matches[1] : 'src/angular/unknown-file.jade'
         baseNoExt = File.basename(filePath, '.jade')
         dir = File.dirname(filePath).split('/')
@@ -86,8 +104,6 @@ module Jekyll
       # puts " >> new href #{newHref}"
       return newHref
     end
-
   end
-
 end
 

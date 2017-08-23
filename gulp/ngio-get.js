@@ -7,7 +7,7 @@
 
 module.exports = function (gulp, plugins, config) {
 
-  const NgIoUtil = require('../src/resources/js/util.js').NgIoUtil;
+  const NgIoUtil = require('./ngio-util.js').NgIoUtil;
 
   const argv = plugins.argv;
   const cp = plugins.child_process;
@@ -21,8 +21,8 @@ module.exports = function (gulp, plugins, config) {
   const ngioExPath = path.join(angulario, 'public/docs/_examples');
   const EXAMPLES_PATH = config.EXAMPLES_PATH;
   const BOILERPLATE_PATH = path.join(EXAMPLES_PATH, '_boilerplate');
-  
-  // To force a refresh of Dart Jade file invoke with --dart. 
+
+  // To force a refresh of Dart Jade file invoke with --dart.
   // You'd usually only do that if you put-ngio and made edits to Dart Jade.
   gulp.task('get-ngio-files', ['_clean', 'get-ngio-examples+', '_get-pages', '_get-resources']);
 
@@ -58,7 +58,7 @@ module.exports = function (gulp, plugins, config) {
     var apiPageEntryName = matches[i++];
     var apiEntryKind = matches[i++];
     var suffix = matches[i++];
-    return hrefPrefix + '/angular/api/angular2.' + libName + '/' + apiPageEntryName + '-class' + suffix;
+    return hrefPrefix + '/angular/api/angular.' + libName + '/' + apiPageEntryName + '-class' + suffix;
   }
 
   function ngioExPathForDart(match, path) {
@@ -68,7 +68,7 @@ module.exports = function (gulp, plugins, config) {
   gulp.task('_get-ts-jade', cb => _getTsJade('latest'));
   // TODO: drop this next task. We'll stop syncing the cache very soon.
   gulp.task('_get-ts-jade-cache', cb => _getTsJade('_cache'));
-  
+
   function _getTsJade(dirName) {
     const baseDir = path.join(angulario, 'public/docs');
     return gulp.src([
@@ -87,6 +87,9 @@ module.exports = function (gulp, plugins, config) {
       // `${baseDir}/ts/${dirName}/_quickstart_repo.jade`,
       `${baseDir}/ts/${dirName}/tutorial/index.jade`,
       `${baseDir}/ts/${dirName}/tutorial/toh-pt1.jade`,
+      `${baseDir}/ts/${dirName}/tutorial/toh-pt2.jade`,
+      `${baseDir}/ts/${dirName}/tutorial/toh-pt3.jade`,
+      `${baseDir}/ts/${dirName}/tutorial/toh-pt4.jade`,
       `${baseDir}/ts/${dirName}/tutorial/toh-pt5.jade`,
       `${baseDir}/ts/${dirName}/tutorial/toh-pt6.jade`,
       // These files are no longer Jade extended but we still sync them for diffs.
@@ -119,8 +122,6 @@ module.exports = function (gulp, plugins, config) {
       .pipe(replace(/include (\.\.\/)*_util-fns(\.jade)?/g, '//- $&'))
       // General patch
       .pipe(replace(/target="_blank"/g, '$& rel="noopener"'))
-      // 2017-03-24 Patch: undo Ward's tag rename my-hero-detail -> hero-detail
-      .pipe(replace(/((\&lt;|<)\/?)(hero-detail(\&gt;|>| ))/g, '$1my-$3'))
       // Patch toh-5; don't include TS-specific _see-addr-bar.jade
       .pipe(replace(/include (\.\.\/)*_includes\/_see-addr-bar(\.jade)?/g, '//- $&'))
       // Patch guide/index - set the advancedLandingPage  because it is not worth trying to read it from the harp _data file
@@ -313,12 +314,12 @@ module.exports = function (gulp, plugins, config) {
             .replace(/(^|(^|\\/)(dart|ts)\\/)src\\//, '$1')`;
     return gulp.src([
       `${baseDir}/resources/js/**/*`,
+      `!${baseDir}/resources/js/controllers/**`,
       `${baseDir}/resources/css/_options.scss`,
       `${baseDir}/resources/css/layout/_{grids,layout}.scss`,
       `${baseDir}/resources/css/base/_{colors,mixins,reset}.scss`,
       `${baseDir}/resources/css/module/_{alert,api,banner,buttons,callout,code,code-box,code-shell,filetree,form,images,symbol,table}.scss`,
       `!${baseDir}/resources/js/vendor/{jquery,lang-*,prettify}.js`,
-      `!${baseDir}/resources/js/controllers/resources-controller.js`,
       `!${baseDir}/resources/js/directives/scroll-y-offset-element.js`,
     ], { base: baseDir })
       // Patch resources/js/site.js
@@ -373,13 +374,8 @@ module.exports = function (gulp, plugins, config) {
       `!${baseDir}/{homepage-*,ngmodule,node_modules,reactive-forms}/**`,
       `!${baseDir}/{setup,style-guide,styleguide,testing,upgrade*,webpack}/**`,
     ], { base: baseDir })
-      // 2017-03-24 Patch: undo Ward's tag rename my-hero-detail -> hero-detail
-      .pipe(replace(/(my-app( >)? )(hero-detail )/g, '$1my-$3'))
       // Patch security/e2e-spec.ts
       .pipe(replace(/(.toContain\('Template) alert\("0wned"\) (Syntax'\))/, '$1 $2', {skipBinary:true}))
-      // Patch component-styles/e2e-spec.ts
-      // https://github.com/dart-lang/angular2/issues/39
-      .pipe(replace(/(it\('includes styles loaded with CSS @import')/, 'x$1', {skipBinary:true}))
       .pipe(gulp.dest(EXAMPLES_PATH));
   });
 

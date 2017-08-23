@@ -3,10 +3,10 @@ description: A simple AngularDart app
 version: 0.0.1
 
 environment:
-  sdk: '>=1.23.0 <2.0.0'
+  sdk: '>=1.24.0 <2.0.0'
 
 dependencies:
-  angular2: ^3.0.0
+  angular2: ^3.1.0
 
 dev_dependencies:
   browser: ^0.10.0
@@ -14,9 +14,5 @@ dev_dependencies:
 
 transformers:
 - angular2:
-    platform_directives:
-    - 'package:angular2/common.dart#COMMON_DIRECTIVES'
-    platform_pipes:
-    - 'package:angular2/common.dart#COMMON_PIPES'
     entry_points: web/main.dart
 - dart_to_js_script_rewriter

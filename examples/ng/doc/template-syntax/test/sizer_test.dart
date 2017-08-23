@@ -6,7 +6,7 @@ import 'dart:async';
 
 import 'package:angular2/angular2.dart';
 import 'package:angular_test/angular_test.dart';
-import 'package:template_syntax/sizer_component.dart';
+import 'package:template_syntax/src/sizer_component.dart';
 import 'package:test/test.dart';
 
 import 'sizer_po.dart';
@@ -59,13 +59,16 @@ void main() {
     });
   });
 
+  // #docregion Output-after-inc
   group('inc:', () {
     const expectedSize = initSize + 1;
 
     setUp(() => po.inc());
 
     test('font size is $expectedSize', () async {
+      // #enddocregion Output-after-inc
       await _expectSize(expectedSize);
+      // #docregion Output-after-inc
     });
 
     test('@Output $expectedSize size event', () async {
@@ -74,6 +77,7 @@ void main() {
       });
     });
   });
+  // #enddocregion Output-after-inc
 }
 
 Future<Null> _expectSize(int size) async {

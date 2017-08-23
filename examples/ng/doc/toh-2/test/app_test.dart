@@ -46,20 +46,26 @@ void basicTests() {
 }
 
 void selectHeroTests() {
+  // #docregion show-hero-details
   const targetHero = const {'id': 16, 'name': 'RubberMan'};
 
   setUp(() async {
-    await appPO.clickHero(5);
-    appPO = await fixture.resolvePageObject(AppPO); // Refresh PO
+    // #docregion new-PO-after-view-update
+    await appPO.selectHero(5);
+    appPO = await fixture.resolvePageObject(AppPO);
+    // #enddocregion new-PO-after-view-update
   });
 
   test('is selected', () async {
+    // #docregion new-PO-after-view-update
     expect(await appPO.selectedHero, targetHero);
+    // #enddocregion new-PO-after-view-update
   });
 
   test('show hero details', () async {
     expect(await appPO.heroFromDetails, targetHero);
   });
+  // #enddocregion show-hero-details
 
   group('Update hero:', () {
     const nameSuffix = 'X';

@@ -1,10 +1,9 @@
 # Site settings
 title: webdev.dartlang.org
-description: "Dart webdev is a platform for building structured web apps. It includes a language, a VM, libraries, tools, and compilers to many targets, including JavaScript."
+description: "Documentation to help you build high-quality web apps, using Dart tools and libraries. Includes AngularDart docs."
 url: https://webdev.dartlang.org
-baseurl: ""
-port: 4001
-permalink: /:title
+dev-url: https://webdev-dartlang-org-dev.firebaseapp.com
+permalink: /:categories/:title
 repo: https://github.com/dart-lang/site-webdev
 
 # Global variables
@@ -20,71 +19,57 @@ dart_vm:  "https://www.dartlang.org/dart-vm"
 flutter:  "https://flutter.io"
 dartino:  "https://dartino.org"
 dart_api: "https://api.dartlang.org/stable"
-acx_api: "/components/api"
+acx_api: "/api/angular_components"
 flutter_api: "http://docs.flutter.io"
 dartino_api: "https://dartino.github.io/api"
+api: "https://www.dartdocs.org/documentation"
 
 collections:
   articles:
     output: true
-    permalink: /articles/:path
   tutorials:
     output: true
-    permalink: /tutorials/:path
-  samples:
-    output: true
-    permalink: /samples/:path
   guides:
     output: true
-    permalink: /guides/:path
   codelabs:
     output: true
-    permalink: /codelabs/:path
 
 defaults:
 - scope:
     path: ""
-    type: pages
+    # type: pages
   values:
     layout: default
-    toc: true
-- scope:
-    path: ""
-    type: articles
-  values:
-    layout: article
     toc: true
 - scope:
     path: ""
     type: tutorials
   values:
     layout: tutorial
-    toc: true
-- scope:
-    path: ""
-    type: samples
-  values:
-    layout: sample
-    toc: true
-- scope:
-    path: ""
-    type: guides
-  values:
-    layout: guide
-    toc: true
 - scope:
     path: ""
     type: codelabs
   values:
-    layout: codelab
-    toc: true
+    og_type: article
+- scope:
+    path: _codelabs/angular_components
+    type: codelabs
+  values:
+    # The `image` query parameter is a version number. Change the number after the file has been updated,
+    # otherwise the old cached version will be used by Facebook, etc.
+    image: /codelabs/angular_components/images/cartoon.jpeg?3
+- scope:
+    path: _codelabs/ng2
+    type: codelabs
+  values:
+    image: /codelabs/ng2/images/piratemap.jpg?3
+- scope:
+    path: angular/guide/testing
+  values:
+    # layout: angular
+    status: '(DRAFT)'
 
 custom:
-  angular:
-    stable-version: 3.0
-    stable-version-full: 3.0.0
-    dev-version:
-    # url-next-vers: https://webdev-angular3-dartlang-org.firebaseapp.com
   dartpad:
     embed-dart-prefix: "https://dartpad.dartlang.org/embed-dart.html"
     embed-html-prefix: "https://dartpad.dartlang.org/embed-html.html"
@@ -108,29 +93,31 @@ custom:
         ext: zip
         editor-ext: zip
 
+# For defaults see:
+# https://jekyllrb.com/docs/configuration/#default-configuration
+
 # Build settings
-safe: false
 source: src
 destination: publish
 bundler_args: --without production
-markdown: kramdown
 
 # exclude: ['.asset-cache']
 
 keep_files:
+  - examples
+  - api
   - angular/api
   - components/api
 
-gems:
+plugins:
 - jekyll-assets
 - jekyll-toc
-- jekyll-sitemap
 
 assets:
   # compress:
   #   css: true # default - development: false, production: true
   #   js: true # default - development: false, production: true
-  cache: false # default: .asset-cache
+  # cache: false # default: .asset-cache
   # cdn: https://cdn.example.com
   # skip_baseurl_with_cdn: false
   # skip_prefix_with_cdn: false
@@ -149,7 +136,6 @@ assets:
     - _assets/images
     - _assets/javascripts
     - _assets/stylesheets
-    - _assets/page_assets
   features:
     liquid: true # default: false
     automatic_img_size: true # default: true

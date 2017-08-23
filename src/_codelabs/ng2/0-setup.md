@@ -1,19 +1,19 @@
 ---
-layout: codelab
 title: "Step 0: Set up"
 description: "Install any software you need and learn where to find the sample code."
-snippet_img: images/piratemap.jpg
-
 nextpage:
   url: /codelabs/ng2/1-skeleton
   title: "Step 1: Create a Basic Web App"
 prevpage:
   url: /codelabs/ng2
   title: "Avast Ye Pirates: Write an AngularDart App"
-
 header:
   css: ["/codelabs/ng2/darrrt.css"]
 ---
+
+{% comment %}
+update-for-dart-2
+{% endcomment %}
 
 In this step, you install any software that you need,
 and learn where to find the sample code.
@@ -30,6 +30,9 @@ If you wish to run the Dart tools from the command line, add
 `<path-to-the-SDK>/dart-sdk/bin` to your path.
 
 You will need Dartium to test your app during development.
+
+{% include dartium-2.0.html %}
+
 </div>
 
 ## <i class="fa fa-anchor"> </i> Get WebStorm or a plugin.

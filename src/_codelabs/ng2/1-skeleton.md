@@ -1,22 +1,24 @@
 ---
-layout: codelab
 title: "Step 1: Create a Basic Web App"
 description: "Create an Angular app using a Dart template and run it in Dartium."
-snippet_img: images/piratemap.jpg
-
 nextpage:
   url: /codelabs/ng2/2-blankbadge
   title: "Step 2: Add a Pirate Badge Component"
 prevpage:
   url: /codelabs/ng2/0-setup
   title: "Step 0: Set Up"
-
 header:
   css: ["/codelabs/ng2/darrrt.css"]
 ---
 
+{% comment %}
+update-for-dart-2
+{% endcomment %}
+
 In this step, you create an Angular app, look at its code,
 and run the app in Dartium.
+
+{% include dartium-2.0.html %}
 
 <div class="trydart-step-details" markdown="1">
 <aside class="alert alert-success" markdown="1">
@@ -44,8 +46,8 @@ or you can start from scratch.
 <div class="trydart-step-details" markdown="1">
 
 <ol>
-<li markdown="1">Launch WebStorm. <img src="images/WebStorm.png" alt="WebStorm icon">
-  <br><br>
+<li markdown="1">Launch WebStorm.
+  <img src="{% asset_path 'webstorm.svg' %}" alt="WebStorm icon" width="30"><br>
   If this is the first time you are running WebStorm, or if
   you have no open projects from a previous session,
   a "Welcome to WebStorm" screen appears.
@@ -58,13 +60,13 @@ You can find the instructions at
 </li>
 
 <li markdown="1">From the welcome screen,
-choose **Check out from Version Control > Git**.  
-Alternatively, choose **VCS > Git > Clone...** from the menu.  
+choose **Check out from Version Control > Git**.
+Alternatively, choose **VCS > Git > Clone...** from the menu.
 A **Clone Repository** dialog appears.
 </li>
 
 <li markdown="1">Fill out the fields:
-   * **Git Repository URL:** `https://github.com/angular-examples/quickstart`
+   * **Git Repository URL:** <https://github.com/angular-examples/quickstart>
    * **Parent Directory:** _(wherever you like to keep your practice code)_
    * **Directory Name:** `pirate_badge` <br><br>
 </li>
@@ -92,8 +94,10 @@ navigate to a method's declaration, or **Shift+F6** to refactor or rename.
 
 <i class="fa fa-key key-header"> </i> <strong> Key information </strong>
 
-* WebStorm loads its Dart project templates from
-  [Stagehand](http://stagehand.pub/), a Dart project generator.
+* WebStorm can create a Dart project directly from a Git repo.
+* You can also create Dart projects from templates, as shown in
+  [Create a web app](/guides/get-started#4-create-a-web-app)
+  from the [Get Started](/guides/get-started) page.
 
 <i class="fa fa-lightbulb-o key-header"> </i> <strong> Not using WebStorm? </strong>
 
@@ -171,7 +175,7 @@ Dart's static analyzer over the code to look for errors and warnings.
 
 {% prettify none %}
 pub get
-{% endprettify %}  
+{% endprettify %}
 
   Pub is Dart's package management tool.
 </li>
@@ -369,9 +373,12 @@ void main() {
 <div class="trydart-step-details" markdown="1">
 
 {% prettify dart %}
-import 'package:angular2/core.dart';
+import 'package:angular2/angular2.dart';
 
-@Component(selector: 'my-app', template: '<h1>Hello {% raw %}{{name}}{% endraw %}</h1>')
+@Component(
+  selector: 'my-app',
+  template: '<h1>Hello {!{name}}</h1>',
+)
 class AppComponent {
   var name = 'Angular';
 }
@@ -382,7 +389,7 @@ class AppComponent {
 
 <i class="fa fa-key key-header"> </i> <strong> Key information </strong>
 
-* Importing `core.dart` lets the app use `Component` and other
+* Importing `angular2.dart` lets the app use `Component` and other
   common Angular types.
 
 * The `@Component` annotation defines `AppComponent` as an Angular
@@ -426,20 +433,19 @@ name: pirate_badge
 description: A simple AngularDart app
 version: 0.0.1
 environment:
-  sdk: '>=1.23.0 <2.0.0'
+  sdk: '>=1.24.0 <2.0.0'
 dependencies:
-  angular2: ^3.0.0
+  angular2: ^3.1.0
 dev_dependencies:
   browser: ^0.10.0
   dart_to_js_script_rewriter: ^1.0.1
 transformers:
 - angular2:
-    platform_directives:
-    - 'package:angular2/common.dart#COMMON_DIRECTIVES'
-    platform_pipes:
-    - 'package:angular2/common.dart#COMMON_PIPES'
     entry_points: web/main.dart
 - dart_to_js_script_rewriter
+web:
+  compiler:
+    debug: dartdevc
 {% endprettify %}
 
 </div>
@@ -466,22 +472,16 @@ transformers:
   remove the need for reflection at runtime, making your app
   run more efficiently.
 
-* The `platform_directives` definition makes some common
-  Angular directives available to every component.
-  An example of a common Angular directive is NgIf,
-  which lets a component change its UI based on a true-false value
-  in your Dart code.
-
-* The `platform_pipes` definition makes some common
-  Angular pipes available to every component.
-  For example, you can use the built-in PercentPipe to format
-  a number as a percentage.
-
 * The `entry_points` section tells the Angular transformer which file contains
   the starting point for the app. Some apps have multiple entry points.
 
 * Pub uses the `dart_to_js_script_rewriter` transformer when building
   your app for deployment.
+
+* The `web: compiler: ...` entry tells pub to use the Dart development compiler
+  ([dartdevc][]) when building or serving the app in `debug` mode.
+
+  [dartdevc]: https://webdev.dartlang.org/tools/dartdevc
 
 * Running `pub get` installs the packages that your app depends on,
   as defined by your app's pubspec.

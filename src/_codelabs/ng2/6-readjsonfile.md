@@ -1,16 +1,12 @@
 ---
-layout: codelab
 title: "Step 6: Read a  JSON File"
 description: "Write asynchronous code to read a JSON file."
-snippet_img: images/piratemap.jpg
-
 nextpage:
   url: /codelabs/ng2/what-next
   title: "What Next?"
 prevpage:
   url: /codelabs/ng2/5-piratenameservice
   title: "Step 5: Create a Name Service"
-
 header:
   css: ["/codelabs/ng2/darrrt.css"]
 ---
@@ -34,7 +30,7 @@ Add imports to the top.
 [[highlight]]import 'dart:html';[[/highlight]]
 import 'dart:math' show Random;
 
-import 'package:angular2/core.dart';
+import 'package:angular2/angular2.dart';
 {% endprettify %}
 </div>
 
@@ -63,7 +59,7 @@ Add a constant defining the location of the JSON file.
 
 <div class="trydart-step-details" markdown="1">
 {% prettify dart %}
-import 'package:angular2/core.dart';
+import 'package:angular2/angular2.dart';
 
 [[highlight]]const _namesPath =[[/highlight]]
     [[highlight]]'https://www.dartlang.org/f/piratenames.json';[[/highlight]]
@@ -222,6 +218,7 @@ class BadgeComponent {
   String buttonText = 'Aye! Gimme a name!';
   bool isButtonEnabled = [[highlight]]false[[/highlight]];
   [[highlight]]bool isInputEnabled = false[[/highlight]];
+  ...
 }
 {% endprettify %}
 </div>
@@ -311,7 +308,7 @@ To get the `Future` type, import `dart:async`.
 {% prettify dart %}
 [[highlight]]import 'dart:async';[[/highlight]]
 
-import 'package:angular2/core.dart';
+import 'package:angular2/angular2.dart';
 {% endprettify %}
 </div>
 
@@ -344,9 +341,13 @@ If that fails, look in your browser's JavaScript console.
 In Dartium or Chrome, bring up the console using
 **View > Developer > JavaScript Console**.
 
+{% comment %}
+update-for-dart-2
+{% endcomment %}
+
 Finally, if you still haven't found the problem
 check your code against the files in
 [6-readjsonfile](https://github.com/dart-lang/one-hour-codelab/tree/master/ng2/6-readjsonfile).
 
-* [lib/badge_component.dart](https://raw.githubusercontent.com/dart-lang/one-hour-codelab/master/ng2/6-readjsonfile/lib/badge_component.dart)
-* [lib/name_service.dart](https://raw.githubusercontent.com/dart-lang/one-hour-codelab/master/ng2/6-readjsonfile/lib/name_service.dart)
+* [lib/src/badge_component.dart](https://raw.githubusercontent.com/dart-lang/one-hour-codelab/master/ng2/6-readjsonfile/lib/src/badge_component.dart)
+* [lib/src/name_service.dart](https://raw.githubusercontent.com/dart-lang/one-hour-codelab/master/ng2/6-readjsonfile/lib/src/name_service.dart)

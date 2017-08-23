@@ -6,19 +6,21 @@ import 'utils.dart';
 
 class HeroDetailPO {
   @FirstByCss('div h2')
-  @optional
   PageLoaderElement _title; // e.g. 'Mr Freeze details!'
 
   @FirstByCss('div div')
-  @optional
   PageLoaderElement _id;
 
   @ByTagName('input')
-  @optional
   PageLoaderElement _input;
 
   @ByTagName('button')
-  List<PageLoaderElement> _buttons;
+  @WithVisibleText('Back')
+  PageLoaderElement _back;
+
+  @ByTagName('button')
+  @WithVisibleText('Save')
+  PageLoaderElement _save;
 
   Future<Map> get heroFromDetails async {
     if (_id == null) return null;
@@ -31,6 +33,6 @@ class HeroDetailPO {
   Future clear() => _input.clear();
   Future type(String s) => _input.type(s);
 
-  Future back() => _buttons[0].click();
-  Future save() => _buttons[1].click();
+  Future back() => _back.click();
+  Future save() => _save.click();
 }

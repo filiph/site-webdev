@@ -13,12 +13,16 @@ if [ ! -e "publish" ]; then
 fi
 
 set -x
-firebase serve --port $PORT > /dev/null &
-FBS_PID=$!
+((superstatic --port $PORT > /dev/null  2>&1) \
+  || echo "Failed to launch superstatic server. Maybe it is already running?") &
+SERVER_PID=$!
 
 sleep 4
 
-linkcheck :4001 --skip-file ./scripts/config/linkcheck-skip-list.txt \
+# Don't check for external links yet since it seems to cause problems on Travis: --external 
+pub global run linkcheck \
+  --skip-file ./scripts/config/linkcheck-skip-list.txt \
+  :$PORT \
   | tee $TMP/linkcheck-log.txt
 
 set +x
@@ -27,6 +31,6 @@ if ! grep '^\s*0 errors' $TMP/linkcheck-log.txt | wc -l > /dev/null; then
   CHECK_EXIT_CODE=1
 fi
 
-kill $FBS_PID
+kill $SERVER_PID
 
 exit $CHECK_EXIT_CODE

@@ -16,6 +16,12 @@ For information about general tools for Dart apps, see
 
 Dartium is a special build of Chromium used for developing web apps.
 
+{% include dartium-2.0.html %}
+
+{% comment %}
+update-for-dart-2
+{% endcomment %}
+
 <a href="/tools/dartium">
 <img src="{% asset_path 'dartium-logo-48.jpg' %}" alt="Dart logo" /><br>
 <b>Dartium</b>
@@ -30,7 +36,7 @@ If you don't already have a favorite IDE,
 we recommend WebStorm, which comes with Dart support.
 
 <a href="/tools/webstorm">
-<img src="{% asset_path 'webstorm.png' %}" alt="WebStorm logo"><br>
+<img src="{% asset_path 'webstorm.svg' %}" alt="WebStorm icon" width="48"><br>
 <b>WebStorm</b>
 </a>
 
@@ -46,7 +52,10 @@ included in the SDK, the following tools
 offer specialized support for web programming.
 
 [dart2js](/tools/dart2js)
-: Dart-to-JavaScript compiler
+: The original Dart-to-JavaScript compiler, with tree shaking
+
+[dartdevc](/tools/dartdevc)
+: The Dart dev compiler, a modular Dart-to-JavaScript compiler
 
 [pub build](/tools/pub/pub-build)
 : Pub command for building a web app
